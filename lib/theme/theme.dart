@@ -10,7 +10,7 @@ final Color mainColorRed = Color.fromARGB(255, 160, 21, 62);
 final Color backgroundColor = Color.fromARGB(255, 255, 255, 255);
 final Color textColor = Color.fromARGB(255, 80, 73, 73);
 final Color textColorBold = Color.fromARGB(255, 18, 18, 18);
-
+final Color backgroundColor2 = Color.fromARGB(255, 250, 250, 250);
 final Color iconColor = Color.fromARGB(255, 80, 73, 73);
 
 final Color boldblue = Color.fromARGB(255, 56, 45, 127);
@@ -39,10 +39,10 @@ final ThemeData lightTheme = ThemeData(
             fontWeight: FontWeight.w500)
         .copyWith(fontFamilyFallback: ['Roboto', 'Arial']),
     displaySmall: GoogleFonts.sulphurPoint(
-            letterSpacing: 1, color: textColor, fontSize: 14)
+            letterSpacing: 1, color: iconColor, fontSize: 14)
         .copyWith(fontFamilyFallback: ['Roboto', 'Arial']),
     bodySmall: GoogleFonts.sulphurPoint(
-            letterSpacing: 1, color: textColor, fontSize: 12.0)
+            letterSpacing: 1, color: iconColor, fontSize: 12.0)
         .copyWith(fontFamilyFallback: ['Roboto', 'Arial']),
     bodyMedium: GoogleFonts.sulphurPoint(color: textColor, fontSize: 14.0)
         .copyWith(fontFamilyFallback: ['Roboto', 'Arial']),

@@ -19,7 +19,8 @@ class ProductGrid extends StatelessWidget {
       'title': 'Product 2',
       'price': 19.99,
       'category': 'Category B',
-      'description': 'Amazing features and great quality.', // Add description
+      'description':
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non', // Add description
     },
     {
       'imageUrl':
@@ -32,6 +33,46 @@ class ProductGrid extends StatelessWidget {
     {
       'imageUrl':
           'https://images.pexels.com/photos/25466531/pexels-photo-25466531/free-photo-of-three-bottles-of-gel.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'title': 'Product 4',
+      'price': 49.99,
+      'category': 'Category C',
+      'description': 'A must-have item for your collection.', // Add description
+    },
+    {
+      'imageUrl':
+          'https://images.pexels.com/photos/212236/pexels-photo-212236.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'title': 'Product 5',
+      'price': 60.99,
+      'category': 'Category C',
+      'description': 'A must-have item for your collection.', // Add description
+    },
+    {
+      'imageUrl':
+          'https://images.pexels.com/photos/2688991/pexels-photo-2688991.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'title': 'Product 6',
+      'price': 149.99,
+      'category': 'Category C',
+      'description': 'A must-have item for your collection.', // Add description
+    },
+    {
+      'imageUrl':
+          'https://images.pexels.com/photos/25466531/pexels-photo-25466531/free-photo-of-three-bottles-of-gel.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'title': 'Product 4',
+      'price': 49.99,
+      'category': 'Category C',
+      'description': 'A must-have item for your collection.', // Add description
+    },
+    {
+      'imageUrl':
+          'https://images.pexels.com/photos/7795791/pexels-photo-7795791.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+      'title': 'Product 4',
+      'price': 49.99,
+      'category': 'Category C',
+      'description': 'A must-have item for your collection.', // Add description
+    },
+    {
+      'imageUrl':
+          'https://images.pexels.com/photos/8490173/pexels-photo-8490173.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
       'title': 'Product 4',
       'price': 49.99,
       'category': 'Category C',

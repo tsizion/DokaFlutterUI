@@ -1,9 +1,9 @@
+import 'package:doka/Widgets/reviews/review.dart'; // Import the Review widget
 import 'package:doka/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class ProductDetail extends StatefulWidget {
-  // Sample product data
   final String productName;
   final List<String> imageUrls;
   final String description;
@@ -25,12 +25,21 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailState extends State<ProductDetail> {
   int _currentIndex = 0; // Track the current image index
+  bool _isExpanded = false; // Track if the description is expanded
 
   @override
   Widget build(BuildContext context) {
+    // Sample review data
+    final Review sampleReview = Review(
+      username: 'Jane Doe',
+      comment: 'This product is amazing! I love it.',
+      rating: 5.0,
+    );
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 250, 250, 250),
       appBar: AppBar(
+        backgroundColor: backgroundColor2,
         title: Text(
           'Product Detail',
           style: Theme.of(context).textTheme.displayMedium,
@@ -59,8 +68,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   Container(
                     margin: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 10),
-                    height: MediaQuery.of(context).size.height *
-                        0.75, // 60% of screen height
+                    height: 500,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(
@@ -99,8 +107,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                       index; // Update current index on page change
                                 });
                               },
-                              scrollDirection: Axis
-                                  .horizontal, // Ensure horizontal scrolling
+                              scrollDirection: Axis.horizontal,
                             ),
                           ),
                         ),
@@ -189,7 +196,8 @@ class _ProductDetailState extends State<ProductDetail> {
                   // Scrollable description box
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 30.0, vertical: 10),
+                        horizontal: 30.0,
+                        vertical: 10), // Reduce vertical padding
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Column(
@@ -200,17 +208,50 @@ class _ProductDetailState extends State<ProductDetail> {
                             style: Theme.of(context).textTheme.displayMedium,
                           ),
                           const SizedBox(
-                              height: 10), // Space before description text
-                          // Scrollable description container
+                            height:
+                                8, // Slightly reduce space before description text
+                          ),
+                          // Non-scrollable description container
                           Container(
-                            height: 150, // Set a fixed height for description
-                            child: SingleChildScrollView(
-                              child: Text(
-                                widget.description,
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
+                            padding: const EdgeInsets.all(
+                                10), // Add some padding for better readability
+                            decoration: BoxDecoration(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _isExpanded
+                                      ? widget.description
+                                      : (widget.description.length > 50
+                                          ? '${widget.description.substring(0, 50)}...'
+                                          : widget.description),
+                                  style:
+                                      Theme.of(context).textTheme.displayMedium,
+                                ),
+                                const SizedBox(height: 10),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _isExpanded =
+                                          !_isExpanded; // Toggle expanded state
+                                    });
+                                  },
+                                  child: Text(
+                                    _isExpanded ? 'Show less' : 'Read more',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
+                          const SizedBox(
+                              height: 10), // Space before the review widget
+                          ReviewWidget(
+                              review:
+                                  sampleReview), // Place review widget right after description
                         ],
                       ),
                     ),
