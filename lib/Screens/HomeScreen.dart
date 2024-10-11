@@ -1,3 +1,4 @@
+import 'package:doka/Widgets/HomeScreen/SideDrawer.dart';
 import 'package:doka/Widgets/HomeScreen/TabBar.dart';
 import 'package:flutter/material.dart';
 import 'package:doka/Widgets/HomeScreen/header.dart'; // Import Header widget
@@ -8,7 +9,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(), // Use the Header widget as the app bar
+      appBar: Header(),
+      drawer:
+          SideDrawer(), // Attach the side drawer // Use the Header widget as the app bar
       body: Column(
         children: [
           custom.Search(), // SearchBar widget placed below the header

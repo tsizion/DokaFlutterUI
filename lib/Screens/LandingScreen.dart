@@ -3,7 +3,7 @@ import 'package:doka/Screens/HomeScreen.dart';
 import 'package:doka/Screens/ProfileScreen.dart';
 import 'package:doka/Screens/SearchScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:motion_tab_bar/MotionTabBar.dart';
 
 class LandingScreen extends StatefulWidget {
   @override
@@ -18,7 +18,9 @@ class _LandingScreenState extends State<LandingScreen> {
     HomeScreen(),
     SearchScreen(),
     CartScreen(),
-    ProfileScreen(),
+    ProfileScreen(
+      isRegistered: false,
+    ),
   ];
 
   void _onItemTapped(int index) {
@@ -29,33 +31,47 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    // Define Modern Orange Color
+    final modernOrange =
+        Color.fromARGB(255, 226, 165, 89); // Modern vibrant orange
+
     return Scaffold(
       body: _widgetOptions
           .elementAt(_selectedIndex), // Display the selected widget
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+      bottomNavigationBar: MotionTabBar(
+        labels: ['Home', 'Search', 'Cart', 'Profile'],
+        icons: [
+          Icons.home,
+          Icons.search,
+          Icons.shopping_cart,
+          Icons.person,
         ],
-        currentIndex: _selectedIndex, // Set the current index
-        onTap: _onItemTapped, // Handle item tap
-        selectedItemColor: Colors.pinkAccent,
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
+        initialSelectedTab: 'Home',
+        onTabItemSelected: (index) {
+          _onItemTapped(index); // Update selected index
+        },
+        textStyle: theme.textTheme.bodySmall?.copyWith(
+          color: isDarkMode ? Colors.white : Colors.black,
+        ),
+        tabIconColor: isDarkMode
+            ? Colors.grey[600]
+            : modernOrange, // Tab icon color for unselected tabs
+        tabIconSelectedColor: isDarkMode
+            ? Colors.orangeAccent
+            : modernOrange, // Tab icon color for selected tabs
+        tabBarColor: isDarkMode
+            ? Colors.grey[900]
+            : Colors.white, // Tab bar background color
+        tabSelectedColor: isDarkMode
+            ? Colors.orangeAccent.withOpacity(0.3)
+            : modernOrange.withOpacity(0.3), // Tab highlight color
+        tabIconSize: 20,
+        tabIconSelectedSize: 24,
+        tabBarHeight: 50,
+        tabSize: 40,
       ),
     );
   }

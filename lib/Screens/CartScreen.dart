@@ -1,3 +1,5 @@
+import 'package:doka/Screens/HomeScreen.dart';
+import 'package:doka/Screens/LandingScreen.dart';
 import 'package:doka/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -103,7 +105,12 @@ class CartScreen extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) =>
+                    LandingScreen(), // Replace with your actual home screen
+              ),
+            );
           },
         ),
       ),

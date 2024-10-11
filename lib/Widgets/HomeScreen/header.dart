@@ -11,7 +11,8 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           color: iconColor,
         ), // Hamburger menu icon
         onPressed: () {
-          // Handle menu press
+          // Open the Drawer when the menu icon is pressed
+          Scaffold.of(context).openDrawer();
         },
       ),
       title: Text('Home', style: Theme.of(context).textTheme.displayMedium),
