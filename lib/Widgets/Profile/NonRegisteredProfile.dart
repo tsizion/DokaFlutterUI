@@ -142,61 +142,59 @@ class _NonRegisteredProfileState extends State<NonRegisteredProfile> {
     required FormFieldSetter<String?> onSaved,
     required FormFieldValidator<String?> validator,
   }) {
-    return Container(
-      height: 50, // Set a fixed height
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Color.fromARGB(255, 216, 216, 216)
-                .withOpacity(0.2), // Shadow color
-            offset: Offset(0, 4), // Horizontal and vertical offset
-            blurRadius: 8, // Blur radius
-            spreadRadius: 1, // Spread radius
-          ),
-        ],
-        color: Colors.white, // Inside color
+    return TextFormField(
+      obscureText: isPassword
+          ? (label == 'Password'
+              ? !_isPasswordVisible
+              : !_isConfirmPasswordVisible)
+          : false,
+      decoration: InputDecoration(
+        hintText: label, // Use hintText instead of labelText
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none, // No visible border by default
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide:
+              BorderSide(color: Colors.red, width: 1.5), // Red border on error
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+              color: Colors.black, width: 1.5), // Dark border on focus
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none, // Default no border
+        ),
+        suffixIcon: isPassword
+            ? IconButton(
+                icon: Icon(
+                  label == 'Password'
+                      ? (_isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off)
+                      : (_isConfirmPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                ),
+                onPressed: () {
+                  setState(() {
+                    if (label == 'Password') {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    } else {
+                      _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                    }
+                  });
+                },
+              )
+            : null,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: 10, horizontal: 20), // Padding inside the field
       ),
-      child: TextFormField(
-        obscureText: isPassword
-            ? !(_isPasswordVisible || _isConfirmPasswordVisible)
-            : false,
-        decoration: InputDecoration(
-            labelText: label,
-            border: InputBorder.none, // No border color
-            suffixIcon: isPassword
-                ? IconButton(
-                    icon: Icon(
-                      isPassword == true
-                          ? (_isPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off)
-                          : (_isConfirmPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (isPassword) {
-                          if (label == 'Password') {
-                            _isPasswordVisible = !_isPasswordVisible;
-                          } else {
-                            _isConfirmPasswordVisible =
-                                !_isConfirmPasswordVisible;
-                          }
-                        }
-                      });
-                    },
-                  )
-                : null,
-            errorStyle: TextStyle(color: Colors.red),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: 10, horizontal: 20), // Padding inside the field
-            labelStyle: displaySmallStyle // Label color
-            ),
-        validator: validator,
-        onSaved: onSaved,
-      ),
+      validator: validator,
+      onSaved: onSaved,
     );
   }
 }
