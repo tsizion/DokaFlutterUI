@@ -1,46 +1,29 @@
 class Product {
-  final String id; // Assuming you will receive an ID from the database
-  final String name;
-  final String description;
-  final String category; // This will hold the category ID
+  final List<String> imageUrls; // Change this to a list
+  final String title;
   final double price;
-  final int stock;
-  final List<String> images; // List of image URLs
+  final String category;
+  final String description;
 
   Product({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.category,
+    required this.imageUrls, // Accept a list of image URLs
+    required this.title,
     required this.price,
-    required this.stock,
-    required this.images,
+    required this.category,
+    required this.description,
   });
 
-  // Factory method to create a Product from JSON
   factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
-      id: json['_id'], // Extract the ID from the JSON
-      name: json['name'],
-      description: json['description'],
-      category: json['category'], // Category ID
-      price: json['price'].toDouble(), // Ensure price is double
-      stock: json['stock'],
-      images:
-          List<String>.from(json['images'] ?? []), // Convert the images array
-    );
-  }
+    // Get all image URLs from the JSON response
+    final images =
+        (json['images'] as List).map((url) => url as String).toList();
 
-  // Method to convert Product to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'name': name,
-      'description': description,
-      'category': category, // Include category ID
-      'price': price,
-      'stock': stock,
-      'images': images,
-    };
+    return Product(
+      imageUrls: images, // Assign the list of image URLs
+      title: json['name'],
+      price: json['price'].toDouble(),
+      category: json['category'],
+      description: json['description'],
+    );
   }
 }

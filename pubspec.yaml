@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   carousel_slider: ^5.0.0
+  collection: ^1.18.0
   cupertino_icons: ^1.0.8
   dynamic_tabbar: ^1.0.8
   flutter:

@@ -2,6 +2,8 @@ import 'package:doka/Screens/ProductDetail.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatefulWidget {
+  final List<String> imageUrls; // New parameter to pass all images
+
   final String imageUrl;
   final String title;
   final double price;
@@ -15,6 +17,7 @@ class ProductCard extends StatefulWidget {
     required this.price,
     required this.category, // Add category parameter
     required this.description, // Add description parameter
+    required this.imageUrls, // Include the new parameter
   }) : super(key: key);
 
   @override
@@ -34,10 +37,9 @@ class _ProductCardState extends State<ProductCard> {
             builder: (context) => ProductDetail(
               category: widget.category,
               productName: widget.title,
-              imageUrls: [
-                widget.imageUrl,
-                "https://images.pexels.com/photos/2720447/pexels-photo-2720447.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-              ], // List of image URLs (you can modify this)
+              imageUrls: widget.imageUrls,
+
+              // List of image URLs (you can modify this)
               description: widget.description,
               price: widget.price,
             ),

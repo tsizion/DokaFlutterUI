@@ -15,7 +15,10 @@ class ProductGrid extends StatelessWidget {
 
       return products.map((product) {
         return {
-          'imageUrl': product['images'][0],
+          'imageUrl': (product['images'] as List).first
+              as String, // First image as String
+          'imageUrls': List<String>.from(
+              product['images']), // Convert dynamic to List<String>
           'title': product['name'],
           'price': product['price'],
           'category': product['category'],
@@ -45,23 +48,24 @@ class ProductGrid extends StatelessWidget {
           final products = snapshot.data!;
 
           return GridView.builder(
-            physics:
-                const BouncingScrollPhysics(), // Optional: Add bounce effect
+            physics: const BouncingScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // Two columns
-              childAspectRatio:
-                  0.8, // Aspect ratio for each card (adjust as needed)
-              crossAxisSpacing: 10, // Space between columns
-              mainAxisSpacing: 10, // Space between rows
+              crossAxisCount: 2,
+              childAspectRatio: 0.8,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
             ),
             itemCount: products.length,
             itemBuilder: (context, index) {
+              final product = products[index];
               return ProductCard(
-                imageUrl: products[index]['imageUrl'],
-                title: products[index]['title'],
-                price: products[index]['price'],
-                category: products[index]['category'],
-                description: products[index]['description'],
+                imageUrl: product['imageUrls'][0], // First image for the card
+                title: product['title'],
+                price: product['price'],
+                category: product['category'],
+                description: product['description'],
+                imageUrls:
+                    product['imageUrls'], // Pass all images for detail page
               );
             },
           );
