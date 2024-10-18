@@ -11,15 +11,8 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Profile',
-          style: bodyMediumStyle,
-        ),
-        centerTitle: true,
-      ),
       body: Center(
-        child: isRegistered ? RegisteredProfile() : NonRegisteredProfile(),
+        child: isRegistered ? RegisteredProfile() : SignUp(),
       ),
     );
   }

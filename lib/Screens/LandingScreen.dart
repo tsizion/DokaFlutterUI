@@ -36,7 +36,7 @@ class _LandingScreenState extends State<LandingScreen> {
 
     // Define Modern Orange Color
     final modernOrange =
-        Color.fromARGB(255, 226, 165, 89); // Modern vibrant orange
+        Color.fromARGB(255, 161, 82, 186); // Modern vibrant orange
 
     return Scaffold(
       body: _widgetOptions

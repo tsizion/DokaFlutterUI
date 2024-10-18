@@ -1,28 +1,27 @@
-import 'dart:io';
-
-import 'package:doka/Widgets/Profile/LoginPage.dart';
 import 'package:doka/theme/styles.dart';
 import 'package:doka/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class SignUp extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _SignUpState createState() => _SignUpState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   String? _emailOrPhone;
   String? _password;
-  String? _confirmPassword;
-
   bool _isPasswordVisible = false;
-  bool _isConfirmPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(color: backgroundColor2),
+    return Scaffold(
+        // Ensure the scaffold is at the top level
+
+        body: Container(
+      decoration: BoxDecoration(
+        color: backgroundColor2,
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -38,13 +37,15 @@ class _SignUpState extends State<SignUp> {
                 SizedBox(height: 16),
                 Align(
                   alignment: Alignment.center,
-                  child: Text('Create Your Account',
-                      style: displaySmallStyle?.copyWith(
-                          fontWeight: FontWeight.bold)),
+                  child: Text(
+                    'Sign In to Your Account',
+                    style: displaySmallStyle?.copyWith(
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
                 SizedBox(height: 24),
 
-                // Registration Form
+                // Login Form
                 Form(
                   key: _formKey,
                   child: Column(
@@ -75,50 +76,34 @@ class _SignUpState extends State<SignUp> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 16),
-
-                      // Confirm Password Field
-                      _buildTextField(
-                        label: 'Confirm Password',
-                        isPassword: true,
-                        onSaved: (value) => _confirmPassword = value,
-                        validator: (value) {
-                          if (value != _password) {
-                            return 'Passwords do not match';
-                          }
-                          return null;
-                        },
-                      ),
                       SizedBox(height: 24),
 
-                      // Signup Button
+                      // Sign In Button
                       Container(
                         width: double.infinity, // Full width
                         child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                              // Handle successful registration here
+                              // Handle successful login here
                             }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromARGB(255, 161, 82, 186),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 18), // Button padding
+                            padding: EdgeInsets.symmetric(vertical: 18),
                             shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(10), // Border radius
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                           child: Text(
-                            'Sign Up',
+                            'Sign In',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ),
                       SizedBox(height: 16),
 
-                      // OR Sign Up with Google
+                      // OR Sign In with Google
                       Text('or'),
                       SizedBox(height: 16),
                       Container(
@@ -127,53 +112,37 @@ class _SignUpState extends State<SignUp> {
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 18), // Button padding
+                            padding: EdgeInsets.symmetric(vertical: 18),
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
                                   color: Color.fromARGB(255, 161, 82, 186)),
-                              borderRadius:
-                                  BorderRadius.circular(10), // Border radius
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                           child: Text(
-                            'Sign Up With Google',
-                            style: TextStyle(
-                                color: const Color.fromARGB(255, 0, 0, 0)),
+                            'Sign In With Google',
+                            style:
+                                TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Already have an account",
+                            "Don't have an account?",
                             style: displaySmallStyle,
                           ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        LoginPage()), // Navigate to the login page
-                              );
-                            },
-                            child: Text(
-                              "Login",
-                              style: displaySmallStyle?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(255, 161, 82, 186)),
-                            ),
-                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "Sign Up",
+                            style: displaySmallStyle?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 161, 82, 186)),
+                          )
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -182,7 +151,7 @@ class _SignUpState extends State<SignUp> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildTextField({
@@ -192,11 +161,7 @@ class _SignUpState extends State<SignUp> {
     required FormFieldValidator<String?> validator,
   }) {
     return TextFormField(
-      obscureText: isPassword
-          ? (label == 'Password'
-              ? !_isPasswordVisible
-              : !_isConfirmPasswordVisible)
-          : false,
+      obscureText: isPassword ? !_isPasswordVisible : false,
       decoration: InputDecoration(
         hintStyle: displaySmallStyle,
         filled: true,
@@ -214,8 +179,9 @@ class _SignUpState extends State<SignUp> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-              color: Color.fromARGB(255, 161, 82, 186),
-              width: 0.7), // Dark border on focus
+            color: Color.fromARGB(255, 161, 82, 186),
+            width: 0.7,
+          ), // Dark border on focus
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -224,21 +190,11 @@ class _SignUpState extends State<SignUp> {
         suffixIcon: isPassword
             ? IconButton(
                 icon: Icon(
-                  label == 'Password'
-                      ? (_isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off)
-                      : (_isConfirmPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off),
+                  _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
                 ),
                 onPressed: () {
                   setState(() {
-                    if (label == 'Password') {
-                      _isPasswordVisible = !_isPasswordVisible;
-                    } else {
-                      _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
-                    }
+                    _isPasswordVisible = !_isPasswordVisible;
                   });
                 },
               )
