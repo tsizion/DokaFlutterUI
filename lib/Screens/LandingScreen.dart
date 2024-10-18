@@ -18,9 +18,7 @@ class _LandingScreenState extends State<LandingScreen> {
     HomeScreen(),
     SearchScreen(),
     CartScreen(),
-    ProfileScreen(
-      isRegistered: false,
-    ),
+    ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {

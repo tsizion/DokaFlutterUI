@@ -1,16 +1,18 @@
 import 'dart:io';
 
 import 'package:doka/Widgets/Profile/LoginPage.dart';
+import 'package:doka/providers/profilepage.dart';
 import 'package:doka/theme/styles.dart';
 import 'package:doka/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignUp extends StatefulWidget {
+class SignUp extends ConsumerStatefulWidget {
   @override
   _SignUpState createState() => _SignUpState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUpState extends ConsumerState<SignUp> {
   final _formKey = GlobalKey<FormState>();
   String? _emailOrPhone;
   String? _password;
@@ -158,12 +160,9 @@ class _SignUpState extends State<SignUp> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        LoginPage()), // Navigate to the login page
-                              );
+                              ref
+                                  .read(authPageProvider.notifier)
+                                  .changePage(AuthPage.login);
                             },
                             child: Text(
                               "Login",

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class RegisteredProfile extends StatelessWidget {
+class LoggedInUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(

@@ -1,13 +1,15 @@
+import 'package:doka/providers/profilepage.dart';
 import 'package:doka/theme/styles.dart';
 import 'package:doka/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   String? _emailOrPhone;
   String? _password;
@@ -135,11 +137,18 @@ class _LoginPageState extends State<LoginPage> {
                             style: displaySmallStyle,
                           ),
                           SizedBox(width: 10),
-                          Text(
-                            "Sign Up",
-                            style: displaySmallStyle?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 161, 82, 186)),
+                          GestureDetector(
+                            onTap: () {
+                              ref
+                                  .read(authPageProvider.notifier)
+                                  .changePage(AuthPage.signUp);
+                            },
+                            child: Text(
+                              "Sign Up",
+                              style: displaySmallStyle?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 161, 82, 186)),
+                            ),
                           )
                         ],
                       ),

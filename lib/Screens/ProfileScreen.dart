@@ -1,18 +1,24 @@
-import 'package:doka/Widgets/Profile/NonRegisteredProfile.dart';
+import 'package:doka/Widgets/Profile/LoginPage.dart';
+import 'package:doka/Widgets/Profile/SignUp.dart';
 import 'package:doka/Widgets/Profile/RegisteredProfile.dart';
-import 'package:doka/theme/styles.dart';
+import 'package:doka/providers/profilepage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfileScreen extends StatelessWidget {
-  final bool isRegistered;
-
-  ProfileScreen({required this.isRegistered});
-
+class ProfileScreen extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Watch the authPageProvider to get the current page state
+    final currentPage = ref.watch(authPageProvider);
+
     return Scaffold(
       body: Center(
-        child: isRegistered ? RegisteredProfile() : SignUp(),
+        // Determine which page to show based on the current state
+        child: currentPage == AuthPage.registerUser
+            ? LoggedInUser()
+            : currentPage == AuthPage.login
+                ? LoginPage() // Show Login page
+                : SignUp(), // Default to SignUp page
       ),
     );
   }
