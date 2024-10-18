@@ -109,7 +109,9 @@ class _TabBarWidgetState extends State<TabBarWidget> {
           // Content area
           Flexible(
             child: _selectedIndex < _tabTitles.length
-                ? ProductGrid() // Display the ProductGrid based on selected tab
+                ? ProductGrid(
+                    category: _tabTitles[
+                        _selectedIndex]) // Pass the selected category
                 : Center(child: Text('No Content Available')),
           ),
         ],

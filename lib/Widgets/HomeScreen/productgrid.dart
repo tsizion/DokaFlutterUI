@@ -4,21 +4,41 @@ import 'package:http/http.dart' as http;
 import 'package:doka/Widgets/HomeScreen/ProductCard.dart'; // Adjust the import based on your folder structure
 
 class ProductGrid extends StatelessWidget {
+  final String category; // New parameter for the selected category
+
+  const ProductGrid({Key? key, required this.category}) : super(key: key);
+
   // Method to fetch products from the API
   Future<List<Map<String, dynamic>>> fetchProducts() async {
-    final response = await http
-        .get(Uri.parse('https://dokabackend.onrender.com/api/v1/product/'));
+    final response = await http.get(
+      Uri.parse('https://dokabackend.onrender.com/api/v1/product/'),
+    );
 
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
       final products = jsonResponse['data']['products'] as List;
 
+      // Return filtered products if a category is selected
+      if (category != 'All Categories') {
+        return products.where((product) {
+          return product['category'] == category; // Filter by category
+        }).map((product) {
+          return {
+            'imageUrl': (product['images'] as List).first as String,
+            'imageUrls': List<String>.from(product['images']),
+            'title': product['name'],
+            'price': product['price'],
+            'category': product['category'],
+            'description': product['description'],
+          };
+        }).toList();
+      }
+
+      // Return all products if 'All Categories' is selected
       return products.map((product) {
         return {
-          'imageUrl': (product['images'] as List).first
-              as String, // First image as String
-          'imageUrls': List<String>.from(
-              product['images']), // Convert dynamic to List<String>
+          'imageUrl': (product['images'] as List).first as String,
+          'imageUrls': List<String>.from(product['images']),
           'title': product['name'],
           'price': product['price'],
           'category': product['category'],
