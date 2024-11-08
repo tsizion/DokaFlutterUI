@@ -1,8 +1,10 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:doka/providers/profilepage.dart';
 import 'package:doka/theme/styles.dart';
 import 'package:doka/theme/theme.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   @override
@@ -15,152 +17,173 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   String? _password;
   bool _isPasswordVisible = false;
 
+  Future<void> _login() async {
+    final url = Uri.parse("https://dokabackend.onrender.com/api/v1/login");
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({
+      if (_emailOrPhone != null && _emailOrPhone!.contains('@'))
+        'email': _emailOrPhone
+      else
+        'phoneNumber': _emailOrPhone,
+      'password': _password,
+    });
+
+    // Debugging print statements
+    print("Request body: $body");
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        print("Login successful: ${responseData['user']['FullName']}");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  'Successfully logged in as ${responseData['user']['FullName']}')),
+        );
+      } else {
+        print("Failed to log in: ${response.statusCode}");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content:
+                  Text('Failed to log in. Please check your credentials.')),
+        );
+      }
+    } catch (error) {
+      print("Error occurred during login: $error");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred. Please try again later.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // Ensure the scaffold is at the top level
-
-        body: Container(
-      decoration: BoxDecoration(
-        color: backgroundColor2,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Logo
-                Text(
-                  'Doka', // Your text logo
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Sign In to Your Account',
-                    style: displaySmallStyle?.copyWith(
-                        fontWeight: FontWeight.bold),
+      body: Container(
+        decoration: BoxDecoration(color: backgroundColor2),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Doka', style: Theme.of(context).textTheme.titleLarge),
+                  SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Sign In to Your Account',
+                      style: displaySmallStyle?.copyWith(
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-                SizedBox(height: 24),
-
-                // Login Form
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      // Email or Phone Field
-                      _buildTextField(
-                        label: 'Email or Phone',
-                        isPassword: false,
-                        onSaved: (value) => _emailOrPhone = value,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email or phone number';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 16),
-
-                      // Password Field
-                      _buildTextField(
-                        label: 'Password',
-                        isPassword: true,
-                        onSaved: (value) => _password = value,
-                        validator: (value) {
-                          if (value == null || value.length < 6) {
-                            return 'Password must be at least 6 characters';
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 24),
-
-                      // Sign In Button
-                      Container(
-                        width: double.infinity, // Full width
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _formKey.currentState!.save();
-                              // Handle successful login here
+                  SizedBox(height: 24),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        _buildTextField(
+                          label: 'Email or Phone',
+                          isPassword: false,
+                          onSaved: (value) => _emailOrPhone = value,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email or phone number';
                             }
+                            return null;
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 161, 82, 186),
-                            padding: EdgeInsets.symmetric(vertical: 18),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Text(
-                            'Sign In',
-                            style: TextStyle(color: Colors.white),
-                          ),
                         ),
-                      ),
-                      SizedBox(height: 16),
-
-                      // OR Sign In with Google
-                      Text('or'),
-                      SizedBox(height: 16),
-                      Container(
-                        width: double.infinity, // Full width
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                            padding: EdgeInsets.symmetric(vertical: 18),
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: Color.fromARGB(255, 161, 82, 186)),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Text(
-                            'Sign In With Google',
-                            style:
-                                TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                          ),
+                        SizedBox(height: 16),
+                        _buildTextField(
+                          label: 'Password',
+                          isPassword: true,
+                          onSaved: (value) => _password = value,
+                          validator: (value) {
+                            if (value == null || value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Don't have an account?",
-                            style: displaySmallStyle,
-                          ),
-                          SizedBox(width: 10),
-                          GestureDetector(
-                            onTap: () {
-                              ref
-                                  .read(authPageProvider.notifier)
-                                  .changePage(AuthPage.signUp);
+                        SizedBox(height: 24),
+                        Container(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!
+                                    .save(); // Ensure fields are saved
+                                _login();
+                              }
                             },
-                            child: Text(
-                              "Sign Up",
-                              style: displaySmallStyle?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(255, 161, 82, 186)),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Color.fromARGB(255, 161, 82, 186),
+                              padding: EdgeInsets.symmetric(vertical: 18),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                          )
-                        ],
-                      ),
-                    ],
+                            child: Text('Sign In',
+                                style: TextStyle(color: Colors.white)),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        Text('or'),
+                        SizedBox(height: 16),
+                        Container(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              padding: EdgeInsets.symmetric(vertical: 18),
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: Color.fromARGB(255, 161, 82, 186)),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: Text('Sign In With Google',
+                                style: TextStyle(color: Colors.black)),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Don't have an account?",
+                                style: displaySmallStyle),
+                            SizedBox(width: 10),
+                            GestureDetector(
+                              onTap: () {
+                                ref
+                                    .read(authPageProvider.notifier)
+                                    .changePage(AuthPage.signUp);
+                              },
+                              child: Text(
+                                "Sign Up",
+                                style: displaySmallStyle?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 161, 82, 186),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
       ),
-    ));
+    );
   }
 
   Widget _buildTextField({
@@ -175,32 +198,29 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         hintStyle: displaySmallStyle,
         filled: true,
         fillColor: Colors.white,
-        hintText: label, // Use hintText instead of labelText
+        hintText: label,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none, // No visible border by default
+          borderSide: BorderSide.none,
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide:
-              BorderSide(color: Colors.red, width: 1.5), // Red border on error
+          borderSide: BorderSide(color: Colors.red, width: 1.5),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: Color.fromARGB(255, 161, 82, 186),
-            width: 0.7,
-          ), // Dark border on focus
+          borderSide:
+              BorderSide(color: Color.fromARGB(255, 161, 82, 186), width: 0.7),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none, // Default no border
+          borderSide: BorderSide.none,
         ),
         suffixIcon: isPassword
             ? IconButton(
-                icon: Icon(
-                  _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                ),
+                icon: Icon(_isPasswordVisible
+                    ? Icons.visibility
+                    : Icons.visibility_off),
                 onPressed: () {
                   setState(() {
                     _isPasswordVisible = !_isPasswordVisible;
@@ -208,8 +228,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 },
               )
             : null,
-        contentPadding: EdgeInsets.symmetric(
-            vertical: 10, horizontal: 20), // Padding inside the field
+        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       ),
       validator: validator,
       onSaved: onSaved,
