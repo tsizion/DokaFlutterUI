@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:doka/providers/profilepage.dart';
 import 'package:doka/theme/styles.dart';
 import 'package:doka/theme/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   @override
@@ -13,13 +15,30 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+
   String? _emailOrPhone;
   String? _password;
   bool _isPasswordVisible = false;
 
+  late final FlutterSecureStorage _secureStorage;
+
+  @override
+  void initState() {
+    super.initState();
+    _secureStorage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+  }
+
+  // Instance method for Android options
+  AndroidOptions _getAndroidOptions() => const AndroidOptions(
+        encryptedSharedPreferences: true,
+      );
+
   Future<void> _login() async {
     final url = Uri.parse("https://dokabackend.onrender.com/api/v1/login");
-    final headers = {'Content-Type': 'application/json'};
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json', // Add Accept header
+    };
     final body = jsonEncode({
       if (_emailOrPhone != null && _emailOrPhone!.contains('@'))
         'email': _emailOrPhone
@@ -29,21 +48,40 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     });
 
     // Debugging print statements
+    print("Request URL: $url");
+    print("Request headers: $headers");
     print("Request body: $body");
 
     try {
       final response = await http.post(url, headers: headers, body: body);
 
+      print("Response status: ${response.statusCode}");
+      print("Response body: ${response.body}");
+
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
-        print("Login successful: ${responseData['user']['FullName']}");
+
+        await _secureStorage.write(
+          key: 'token',
+          value: responseData['token'],
+        );
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userId', responseData['user']['_id']);
+        await prefs.setString('username', responseData['user']['username']);
+        await prefs.setString(
+            'phoneNumber', responseData['user']['phoneNumber']);
+        await prefs.setStringList(
+            'address', List<String>.from(responseData['user']['address']));
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(
-                  'Successfully logged in as ${responseData['user']['FullName']}')),
+                  'Successfully logged in as ${responseData['user']['username']}')),
         );
+        ref.read(authPageProvider.notifier).changePage(AuthPage.loggedInUser);
       } else {
-        print("Failed to log in: ${response.statusCode}");
+        print("Failed to log in: ${response.statusCode} - ${response.body}");
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content:

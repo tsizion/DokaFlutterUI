@@ -1,7 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Enum to represent the different states (pages)
-enum AuthPage { registerUser, login, signUp }
+enum AuthPage {
+  registerUser,
+  login,
+  signUp,
+  loggedInUser
+} // Added loggedInUser
 
 // StateNotifier to manage the authentication page state
 class AuthPageNotifier extends StateNotifier<AuthPage> {
